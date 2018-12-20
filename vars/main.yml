@@ -1,0 +1,8 @@
+---
+default_route: false
+wg_private_ip: "10.0.0.1"
+wg_user_list:
+  user_1: { username: user_1, private_ip: "10.0.0.11", remove: no }
+  user_2: { username: user_2, private_ip: "10.0.0.12", remove: yes }
+  user_3: { username: user_3, private_ip: "10.0.0.13", remove: no }
+wg_allowed_ips: 

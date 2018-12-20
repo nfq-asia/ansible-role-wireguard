@@ -1,0 +1,9 @@
+[Interface]
+Address = {{ item.item.value.private_ip }}/24
+PrivateKey = {{ item['content'] | b64decode }}
+DNS = {{ wg_private_ip }}
+
+[Peer]
+PublicKey = {{ wg_publickey['content'] | b64decode}}
+Endpoint = {{ wg_public_ipv4['content'] }}:51820
+AllowedIPs = {% if default_route %}0.0.0.0/0,{% endif %}{{ wg_allowed_ips }}

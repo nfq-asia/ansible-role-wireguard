@@ -1,0 +1,5 @@
+# Ansible role to install and setup a Wireguard VPN server
+
+## Defaults
+
+* Listen port: UDP/51820
