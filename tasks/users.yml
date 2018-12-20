@@ -63,13 +63,13 @@
   register: wg_user_profile
 
 - debug:
-    msg: "{{ item['path'] }}"
+    msg: "{{ item.item.item.value.username }}"
   loop: "{{ wg_user_profile.results }}"
-  when: (item.item.item.value.remove == False)
+  # when: (item.item.item.value.remove == False)
 
 - name: Fetch Wireguard user configs
   fetch: 
     src: "{{ item['path'] }}"
-    dest: "~/Downloads/wg-{{ item.value.username }}.conf" 
+    dest: "~/Downloads/wg-{{ item.item.item.value.username }}.conf" 
   loop: "{{ wg_user_profile.results }}"
-  when: (item.item.value.remove == False)
+  when: (item.item.item.value.remove == False)
