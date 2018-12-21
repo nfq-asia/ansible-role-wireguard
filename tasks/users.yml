@@ -48,10 +48,11 @@
   template:
     src: "wg0-server.j2"
     dest: "{{ wg_conf_dir.path }}/wg0.conf"
+    mode: 0640
     backup: yes
   loop: "{{ wg_user_publickey.results }}"
   when: (item.item.value.remove == False)
-  notify: start wg0
+  notify: restart wg0
 
 # Generate Wireguard user config
 - name: Generate Wireguard user config
