@@ -1,5 +1,20 @@
 # Ansible role to install and setup a Wireguard VPN server
 
+wireguard homepage: www.wireguard.com
+
+## Prerequisites
+
+* An EC2 instance with public IP address (prefer Elastic IP), with
+Ubuntu 18.04 installed
+* dnsmasq installed
+
 ## Defaults
 
+* Listen host: Public IP address
 * Listen port: UDP/51820
+* Tunnel network: 10.0.0.0/24
+* Create users those listed in vars/main.yml with fields:
+* *  username: username
+* *  private_ip: private IP address to be assigned on Wireguard tunnel
+* *  default_route: yes if user is allowed to use VPN as default route
+* *  remove: no (yes if user is marked to be deleted)
