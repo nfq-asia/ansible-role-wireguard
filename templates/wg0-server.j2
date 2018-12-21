@@ -7,9 +7,9 @@ PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING 
 
 {% for item in wg_user_publickey.results %}
 {% if item.item.value.remove == False %}
-# {{ item.item.value.username }}
 [Peer]
-PublicKey = {{ item['content'] | b64decode }}
-AllowedIps = {{ item.item.value.private_ip }}/24
+PublicKey = {{ item['content'] | b64decode | replace('\n', '') }}
+AllowedIps = {{ item.item.value.private_ip }}/32
+
 {% endif %}
 {% endfor %}
