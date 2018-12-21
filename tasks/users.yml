@@ -51,7 +51,7 @@
     backup: yes
   loop: "{{ wg_user_publickey.results }}"
   when: (item.item.value.remove == False)
-  notify: restart wg0
+  notify: start wg0
 
 # Generate Wireguard user config
 - name: Generate Wireguard user config
@@ -61,12 +61,12 @@
   loop: "{{ wg_user_privatekey.results }}"
   when: (item.item.value.remove == False)
   register: wg_user_profile
+  notify: restart wg0
 
-- debug:
-    msg: "{{ item['dest'] }}"
-    # msg: "{{ item.item.item.value.remove }}"
-  loop: "{{ wg_user_profile.results }}"
-  when: (item.item.item.value.remove == False)
+# - debug:
+#     msg: "{{ item['dest'] }}"
+#   loop: "{{ wg_user_profile.results }}"
+#   when: (item.item.item.value.remove == False)
 
 - name: Fetch Wireguard user configs
   fetch: 

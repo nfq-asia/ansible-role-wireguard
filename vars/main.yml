@@ -1,5 +1,3 @@
 ---
 wg_user_list:
-  user_1: { username: user_1, private_ip: "10.0.0.11", default_route: no, remove: no }
-  user_2: { username: user_2, private_ip: "10.0.0.12", default_route: no, remove: yes }
-  user_3: { username: user_3, private_ip: "10.0.0.13", default_route: no, remove: no } 
+  nam.nguyen: { username: "nam.nguyen", private_ip: "10.0.0.11", default_route: yes, remove: no }
