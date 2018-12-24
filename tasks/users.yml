@@ -54,6 +54,15 @@
   when: (item.item.value.remove == False)
   notify: restart wg0
 
+- name: Start Wireguard server
+  systemd: 
+    name: "wg-quick@wg0"
+    state: started
+    enabled: yes
+
+- setup:
+    gather_subset: "network"
+
 # Generate Wireguard user config
 - name: Generate Wireguard user config
   template:
