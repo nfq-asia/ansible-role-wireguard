@@ -13,7 +13,7 @@ Ubuntu 18.04 installed
 
 * Listen host: Public IP address
 * Listen port: UDP/51820
-* Tunnel network: 10.0.0.0/24
+* Tunnel network: 10.99.0.0/24
 * Create users those listed in vars/main.yml with fields:
   *  username: username
   *  private_ip: private IP address to be assigned on Wireguard tunnel
