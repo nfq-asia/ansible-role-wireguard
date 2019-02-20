@@ -1,9 +1,9 @@
 ---
 - include_tasks: install.yml
-  tags: install
+  tags: wg-install
 
 - include_tasks: configure.yml
-  tags: configure
+  tags: wg-configure
 
 - include_tasks: users.yml
-  tags: wg_users
+  tags: wg-users

@@ -1,8 +1,31 @@
-.terraform
+# Private
+.pem
+
+# OS generated
 .DS_Store
-.idea
+.DS_Store?
+
+# User backup files
+*.bak
+*.swp
+
+# Test files
 *.retry
 *.log
-*.plan
-*.tfvars
-*.tfstate*
+*.logs
+
+# Vagrant artifacts
+.vagrant
+
+# Editor files
+.vscode
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
