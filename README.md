@@ -34,5 +34,4 @@ Ubuntu 18.04 installed
 #### Notes
 
 * Check ~/Download/<server_public_ip>/etc/wireguard/ directory for users
-configs.
-* Playbook must use `gather_facts: yes` to detect `ansible_default_ipv4`
+configs
