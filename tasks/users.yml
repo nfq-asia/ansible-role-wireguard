@@ -1,27 +1,45 @@
 ---
+- name: Get wireguard private key
+  slurp:
+    src: "{{ wg_conf_dir.path }}/privatekey"
+  register: wg_privatekey
+
+- name: Get wireguard public key
+  slurp:
+    src: "{{ wg_conf_dir.path }}/publickey"
+  register: wg_publickey
+
+- name: Get wireguard server public IPv4
+  uri:
+    url: "http://169.254.169.254/latest/meta-data/public-ipv4"
+    remote_src: true
+    return_content: true
+  register: wg_public_ipv4
+
 - name: Create Wireguard user config directory
   file:
     path: "{{ wg_conf_dir.path }}/{{ item.value.username }}"
     state: directory
   with_dict: "{{ wg_user_list }}"
-  when: (item.value.remove == False)
+  when: not item.value.remove
 
-- name: remove Wireguard user config directory
+- name: Remove Wireguard user config directory
   file:
     path: "{{ wg_conf_dir.path }}/{{ item.value.username }}"
     state: absent
   with_dict: "{{ wg_user_list }}"
-  when: (item.value.remove == True)
+  when: item.value.remove
 
 - name: Generate Wireguard users key
   shell: |
+    bash -c "set -euxo pipefail;
     if [ ! -f {{ wg_conf_dir.path }}/{{ item.value.username }}/privatekey ]
       then
         cd {{ wg_conf_dir.path }}/{{ item.value.username }}
         wg genkey | tee privatekey | wg pubkey > publickey
     fi
-    exit 0
-  when: (item.value.remove == False)
+    exit 0"
+  when: not item.value.remove
   with_dict: "{{ wg_user_list }}"
 
 - name: Read user public key
@@ -29,59 +47,47 @@
     src: "{{ wg_conf_dir.path }}/{{ item.value.username }}/publickey"
   with_dict: "{{ wg_user_list }}"
   register: wg_user_publickey
-  when: (item.value.remove == False)
+  when: not item.value.remove
 
 - name: Read user private key
   slurp:
     src: "{{ wg_conf_dir.path }}/{{ item.value.username }}/privatekey"
   with_dict: "{{ wg_user_list }}"
   register: wg_user_privatekey
-  when: (item.value.remove == False)
+  when: not item.value.remove
 
-# Generate Wireguard server config
-# - debug:
-#     msg: "{{ item['content'] }}"
-#   loop: "{{ wg_user_publickey.results }}"
-#   when: (item.item.value.remove == False)
+- name: Setup networking interfaces
+  setup:
+    gather_subset: "network"
 
 - name: Generate Wireguard server config
   template:
     src: "wg0-server.j2"
     dest: "{{ wg_conf_dir.path }}/wg0.conf"
     mode: 0640
-    backup: yes
+    backup: true
   loop: "{{ wg_user_publickey.results }}"
-  when: (item.item.value.remove == False)
+  when: not item.item.value.remove
   notify: restart wg0
 
 - name: Start Wireguard server
   systemd:
     name: "wg-quick@wg0"
     state: started
-    enabled: yes
+    enabled: true
 
-- name: Setup networking interfaces
-  setup:
-    gather_subset: "network"
-
-# Generate Wireguard user config
 - name: Generate Wireguard user config
   template:
     src: "wg0-user.j2"
     dest: "{{ wg_conf_dir.path }}/{{ item.item.value.username }}/wg0.conf"
   loop: "{{ wg_user_privatekey.results }}"
-  when: (item.item.value.remove == False)
+  when: not item.item.value.remove
   register: wg_user_profile
   notify: restart wg0
-
-# - debug:
-#     msg: "{{ item['dest'] }}"
-#   loop: "{{ wg_user_profile.results }}"
-#   when: (item.item.item.value.remove == False)
 
 - name: Fetch Wireguard user configs
   fetch:
     src: "{{ wg_conf_dir.path }}/{{ item.item.item.value.username }}/wg0.conf"
     dest: "{{ wg_download_path }}"
   loop: "{{ wg_user_profile.results }}"
-  when: (item.item.item.value.remove == False)
+  when: not item.item.item.value.remove

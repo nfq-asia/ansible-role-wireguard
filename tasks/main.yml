@@ -1,9 +1,16 @@
 ---
-- include_tasks: install.yml
-  tags: wg-install
+- include: install.yml
+  tags: ['wg-install']
 
-- include_tasks: configure.yml
-  tags: wg-configure
+- name: Create wireguard config dir
+  file:
+    path: "/etc/wireguard"
+    state: directory
+  register: wg_conf_dir
+  tags: ['always']
 
-- include_tasks: users.yml
-  tags: wg-users
+- include: configure.yml
+  tags: ['wg-configure']
+
+- include: users.yml
+  tags: ['wg-users']

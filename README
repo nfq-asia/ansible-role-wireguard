@@ -1,40 +1,38 @@
-# Ansible role to install and setup a Wireguard VPN server
+## Ansible Wireguard VPN
+---
 
-wireguard homepage: www.wireguard.com
+#### Purpose
+* Ansible role to install and manage a [Wireguard VPN server](www.wireguard.com)
 
-## Prerequisites
-
+#### Prerequisites
 * An EC2 instance with public IP address (prefer Elastic IP), with
 Ubuntu 18.04 installed
 * dnsmasq (or the like) installed for DNS forwarding
 * add `net.ipv4.ip_forward = 1` into `/etc/sysctl.conf` file
 
-## Defaults
+#### Defaults
 
 * Listen host: Public IP address
-* Listen port: UDP/51820
-* Tunnel network: 10.99.0.0/24
-* Create users those listed in vars/main.yml with fields:
-  *  username: username
+* Listen port: UDP/51820 - configure with `wg_listen_port`
+* Tunnel network: 10.99.0.0/24 - configure with `wg_private_ip`
+
+#### Required variables
+
+* `wg_user_list` with the following fields
+  *  username
   *  private_ip: private IP address to be assigned on Wireguard tunnel
-  *  default_route: yes if user is allowed to use VPN as default route
-  *  wg_dns_enabled: yes if user is allowed to use server DNS resolver
-  *  remove: no (yes if user is marked to be deleted)
+  *  default_route: true if user is allowed to use VPN as default route
+  *  wg_dns_enabled: true if user is allowed to use server DNS resolver
+  *  remove: true/false to mark user to be deleted
 
-## Example
+#### Tags
 
-Create an Ansible playbook with below content
+* `wg-install` - install service
+* `wg-configure` - initial config
+* `wg-users` - manage users
 
-- hosts: all
-  gather_facts: yes
-  become: yes
+#### Notes
 
-  roles:
-    - wireguard
-
-Run ansible
-
-$ ansible-playbook -i hosts main.yml
-
-Check ~/Download/<server_public_ip>/etc/wireguard/ directory for users
+* Check ~/Download/<server_public_ip>/etc/wireguard/ directory for users
 configs.
+* Playbook must use `gather_facts: yes` to detect `ansible_default_ipv4`
