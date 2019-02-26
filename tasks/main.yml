@@ -1,6 +1,6 @@
 ---
 - include: install.yml
-  tags: ['wg-install']
+  tags: ['install']
 
 - name: Create wireguard config dir
   file:
@@ -10,7 +10,7 @@
   tags: ['always']
 
 - include: configure.yml
-  tags: ['wg-configure']
+  tags: ['config']
 
 - include: users.yml
-  tags: ['wg-users']
+  tags: ['manage-users']

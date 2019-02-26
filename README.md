@@ -30,9 +30,9 @@ Ubuntu 18.04 installed
 
 #### Tags
 
-* `wg-install` - install service
-* `wg-configure` - initial config
-* `wg-users` - manage users
+* `install` - install service
+* `config` - configure service
+* `manage-users` - manage users
 
 #### Notes
 
