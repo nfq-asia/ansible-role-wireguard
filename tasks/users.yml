@@ -30,17 +30,19 @@
   with_dict: "{{ wg_user_list }}"
   when: item.value.remove
 
-- name: Generate Wireguard users key
-  shell: |
-    bash -c "set -euxo pipefail;
-    if [ ! -f {{ wg_conf_dir.path }}/{{ item.value.username }}/privatekey ]
-      then
-        cd {{ wg_conf_dir.path }}/{{ item.value.username }}
-        wg genkey | tee privatekey | wg pubkey > publickey
-    fi
-    exit 0"
+- name: Check if user keypair exists
+  stat:
+    path: "{{ wg_conf_dir.path }}/{{ item.value.username }}/privatekey"
+  register: wg_user_privatekey_exist
   when: not item.value.remove
-  with_dict: "{{ wg_user_list }}"
+  loop: "{{ wg_user_list|dict2items }}"
+
+- name: Generate Wireguard user key
+  shell: |
+    cd {{ wg_conf_dir.path }}/{{ item.item.value.username }}
+    wg genkey | tee privatekey | wg pubkey > publickey
+  when: not item.stat.exists
+  loop: "{{ wg_user_privatekey_exist.results }}"
 
 - name: Read user public key
   slurp:

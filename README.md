@@ -15,14 +15,17 @@ Ubuntu 18.04 installed
 * Listen host: Public IP address
 * Listen port: UDP/51820 - configure with `wg_listen_port`
 * Tunnel network: 10.99.0.0/24 - configure with `wg_private_ip`
+* Routed traffic: 10.0.0.0/8, 172.31.0.0/16 - configure with `wg_routed_traffic`
 
 #### Required variables
 
 * `wg_user_list` with the following fields
   *  username
   *  private_ip: private IP address to be assigned on Wireguard tunnel
-  *  default_route: true if user is allowed to use VPN as default route
-  *  wg_dns_enabled: true if user is allowed to use server DNS resolver
+  *  default_route:
+    - true if user will use VPN as default route (for all traffic)
+    - false will use only preconfigured route `wg_routed_traffic`
+  *  wg_dns_enabled: true if user will use server DNS resolver (will be able to query AWS internal DNS records)
   *  remove: true/false to mark user to be deleted
 
 #### Tags

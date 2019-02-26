@@ -6,7 +6,6 @@
 
 - name: Generate wireguard server keypair
   shell: >
-    bash -c "set -euxo pipefail;
     umask 077 && wg genkey | tee {{ wg_conf_dir.path }}/privatekey |
-    wg pubkey > {{ wg_conf_dir.path }}/publickey"
+    wg pubkey > {{ wg_conf_dir.path }}/publickey
   when: not wg_privatekey_exist.stat.exists
