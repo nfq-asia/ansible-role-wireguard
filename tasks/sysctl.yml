@@ -1,0 +1,7 @@
+---
+- name: Update net.ipv4.ip_forward to 1
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    state: present
+    reload: yes

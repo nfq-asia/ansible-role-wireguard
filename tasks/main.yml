@@ -1,4 +1,7 @@
 ---
+- include_tasks: sysctl.yml
+  tags: sysctl
+
 - include_tasks: install.yml
   tags: install
 
@@ -6,4 +9,4 @@
   tags: configure
 
 - include_tasks: users.yml
-  tags: wg_users
+  tags: users
