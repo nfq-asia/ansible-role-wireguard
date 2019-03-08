@@ -3,11 +3,8 @@ galaxy_info:
   author: namm2
   description: Ansible role to install, configure, and manage MariaDB server
   company: NFQ Asia
-
   license: license (GPLv2, CC-BY, etc)
-
   min_ansible_version: 2.7
-
   galaxy_tags: []
 
 dependencies:
@@ -15,4 +12,3 @@ dependencies:
     scm: git
     name: nfq.dnsmasq
     version: "1.0.0"
-

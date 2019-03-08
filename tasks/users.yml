@@ -49,7 +49,7 @@
     src: "wg0-server.j2"
     dest: "{{ wg_conf_dir.path }}/wg0.conf"
     mode: 0640
-    backup: yes
+    backup: true
   loop: "{{ wg_user_publickey.results }}"
   when: (item.item.value.remove == false)
   notify: restart wg0
@@ -58,7 +58,7 @@
   systemd:
     name: "wg-quick@wg0"
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Setup networking interfaces
   setup:

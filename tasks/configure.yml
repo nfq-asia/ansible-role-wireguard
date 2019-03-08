@@ -9,7 +9,9 @@
   shell: |
     if [ ! -f {{ wg_conf_dir.path }}/privatekey ]
      then
-      umask 077 && wg genkey | tee {{ wg_conf_dir.path }}/privatekey | wg pubkey > {{ wg_conf_dir.path }}/publickey
+      umask 077 && wg genkey | \
+      tee {{ wg_conf_dir.path }}/privatekey | \
+      wg pubkey > {{ wg_conf_dir.path }}/publickey
     fi
     exit 0
 
@@ -29,8 +31,8 @@
 - name: Get wireguard server public IPv4
   uri:
     url: "http://169.254.169.254/latest/meta-data/public-ipv4"
-    remote_src: yes
-    return_content: yes
+    remote_src: true
+    return_content: true
   register: wg_public_ipv4
 
 # - debug:

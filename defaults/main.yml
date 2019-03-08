@@ -1,3 +1,4 @@
+---
 wg_private_ip: "10.99.0.1"
 wg_listen_port: "51820"
 wg_allowed_ips: "0.0.0.0/0"
