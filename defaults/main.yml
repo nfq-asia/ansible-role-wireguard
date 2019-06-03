@@ -1,5 +1,7 @@
 ---
-wg_private_ip: "10.99.0.1"
+wg_private_ip: "{{ ansible_default_ipv4.address }}"
+wg_dns: "{{ wg_private_ip }}" # Default DNS resolver, change to local IPv4 for dnsmasq or AWS Route53 resolver
 wg_listen_port: "51820"
 wg_allowed_ips: "0.0.0.0/0"
-wg_download_path: "~/Downloads"
+wg_download_path: "~/Downloads" # Location where wg users profile will be saved to
+wg_keep_alive: "60" # send keepalive packet every 60s

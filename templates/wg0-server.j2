@@ -9,6 +9,7 @@ PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING 
 {% if item.item.value.remove == false %}
 [Peer]
 PublicKey = {{ item['content'] | b64decode | replace('\n', '') }}
+PresharedKey = {{ wg_psk.content | b64decode | replace('\n','') }}
 AllowedIps = {{ item.item.value.private_ip }}/32
 
 {% endif %}

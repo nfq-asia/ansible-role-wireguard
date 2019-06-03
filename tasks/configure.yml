@@ -13,7 +13,6 @@
       tee {{ wg_conf_dir.path }}/privatekey | \
       wg pubkey > {{ wg_conf_dir.path }}/publickey
     fi
-    exit 0
 
 - name: Get wireguard private key
   slurp:
@@ -27,6 +26,22 @@
   slurp:
     src: "{{ wg_conf_dir.path }}/publickey"
   register: wg_publickey
+
+- name: Generate pre shared key
+  shell: |
+    if [ ! -f {{ wg_conf_dir.path }}/wg_psk ]
+    then
+      wg genpsk | tee {{ wg_conf_dir.path }}/wg_psk
+    fi
+
+- name: Get wireguard pre-shared key
+  slurp:
+    src: "{{ wg_conf_dir.path }}/wg_psk"
+  register: wg_psk
+
+# - name: Debug wg_psk
+#   debug:
+#     msg: "{{ wg_psk.content | b64decode }}"
 
 - name: Get wireguard server public IPv4
   uri:

@@ -20,7 +20,6 @@
         cd {{ wg_conf_dir.path }}/{{ item.value.username }}
         wg genkey | tee privatekey | wg pubkey > publickey
     fi
-    exit 0
   when: (item.value.remove == false)
   with_dict: "{{ wg_user_list }}"
 
@@ -68,7 +67,7 @@
 - name: Generate Wireguard user config
   template:
     src: "wg0-user.j2"
-    dest: "{{ wg_conf_dir.path }}/{{ item.item.value.username }}/wg0.conf"
+    dest: "{{ wg_conf_dir.path }}/{{ item.item.value.username }}/wg0-{{ item.item.value.username }}.conf"
   loop: "{{ wg_user_privatekey.results }}"
   when: (item.item.value.remove == false)
   register: wg_user_profile
@@ -81,7 +80,7 @@
 
 - name: Fetch Wireguard user configs
   fetch:
-    src: "{{ wg_conf_dir.path }}/{{ item.item.item.value.username }}/wg0.conf"
+    src: "{{ wg_conf_dir.path }}/{{ item.item.item.value.username }}/wg0-{{ item.item.item.value.username }}.conf"
     dest: "{{ wg_download_path }}"
   loop: "{{ wg_user_profile.results }}"
   when: (item.item.item.value.remove == false)
