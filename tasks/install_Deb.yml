@@ -1,0 +1,29 @@
+---
+- name: Update aptitude
+  apt:
+    upgrade: full
+    update_cache: true
+    autoclean: true
+    autoremove: true
+
+- name: Add wireguard repository
+  apt_repository:
+    repo: "ppa:wireguard/wireguard"
+    state: present
+
+- name: Install wireguard
+  apt:
+    name: "wireguard"
+    state: latest
+
+# For Ubuntu minimal 19.04 and later
+- name: Check iptables is present
+  stat:
+    path: "/usr/sbin/iptables"
+  register: check_iptables
+
+- name: Install iptables
+  apt:
+    name: "iptables"
+    state: present
+  when: "not check_iptables.stat.exists"
