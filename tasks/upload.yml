@@ -5,21 +5,14 @@
     state: present
 - pip:
     name: boto3
-- name: upload key vpn
+- name: upload key config vpn to s3
   s3_sync:
     bucket: "{{ bucket }}"
     key_prefix: credentials/wireguard
-    file_root: /etc/wireguard/
+    file_root: "{{ wg_conf_dir.path }}/{{ item.value.username }}"
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
     region: "{{ region }}"
-    delete: yes
     exclude: "privatekey"
-- name: Delete an object from a bucket
-  aws_s3:
-    bucket: "{{ bucket }}"
-    object: credentials/wireguard/wg0.conf
-    mode: delobj
-    aws_access_key: "{{ aws_access_key }}"
-    aws_secret_key: "{{ aws_secret_key }}"
-    region: "{{ region }}"
+  with_dict : "{{ wg_user_list }}"
+  when: (item.value.remove == false)
