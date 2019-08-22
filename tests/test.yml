@@ -1,22 +1,28 @@
 ---
-- hosts: all
-  gather_facts: true
+- hosts: wireguard_master
+  gather_facts: yes
   become: true
-
+  vars:
+    ansible_ssh_user             : "ubuntu"
+    ansible_ssh_private_key_file : "~/.ssh/nfq-tools"
+    ansible_python_interpreter   : "/usr/bin/python3"
+    project_name  : "nfq"
+    env           : "tools"
   roles:
-  - role: nfq.wireguard
-    vars:
-      ansible_python_interpreter: /usr/bin/python3
-      wg_user_list:
-        nam.nguyen:
-          username: "nam.nguyen"
-          private_ip: "10.99.0.11"
-          default_route: true
-          wg_dns_enabled: true
-          remove: false
-        nghia.pham:
-          username: "nghia.pham"
-          private_ip: "10.99.0.12"
-          default_route: true
-          wg_dns_enabled: true
-          remove: false
+    - role: nfq.common
+      vars:
+        vm_hostname: "{{ project_name }}-{{ env }}-wireguard"
+    - role: nfq.wireguard
+      vars:
+        s3_bucket: "nfq-infrastructure-terraform"
+        s3_key_prefix: "credentials/wireguard" # s3://<bucket-name>/credentials/wireguard
+        aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
+        aws_secret_key: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
+        region: "ap-southeast-1"
+        wg_user_list:
+          devops:
+            username: "devops"
+            private_ip: "10.99.0.11"
+            default_route: true
+            wg_dns_enabled: true
+            remove: false

@@ -6,3 +6,4 @@ wg_allowed_ips: "0.0.0.0/0"
 wg_download_path: "~/Downloads" # Location where wg users profile will be saved to
 wg_keep_alive: "60" # send keepalive packet every 60s
 region: "ap-southeast-1"
+key_prefix: "credentials/wireguard" # s3://<bucket-name>/credentials/wireguard

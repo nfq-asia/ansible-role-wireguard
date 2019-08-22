@@ -1,14 +1,7 @@
-- name: Install pip
-  apt:
-    name: python3-pip
-    update_cache: yes
-    state: present
-- pip:
-    name: boto3
 - name: upload key config vpn to s3
   s3_sync:
-    bucket: "{{ bucket }}"
-    key_prefix: credentials/wireguard
+    bucket: "{{ s3_bucket }}"
+    key_prefix: "{{ s3_key_prefix }}"
     file_root: "{{ wg_conf_dir.path }}/{{ item.value.username }}"
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"

@@ -2,8 +2,7 @@
 - include_tasks: sysctl.yml
   tags: sysctl
 
-- include_tasks: install_Deb.yml
-  when: ansible_os_family == "Debian"
+- include_tasks: install.yml
   tags: install
 
 - include_tasks: configure.yml

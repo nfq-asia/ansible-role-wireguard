@@ -19,9 +19,6 @@
     src: "{{ wg_conf_dir.path }}/privatekey"
   register: wg_privatekey
 
-# - debug:
-#     msg: "{{ wg_privatekey['content'] }}"
-
 - name: Get wireguard public key
   slurp:
     src: "{{ wg_conf_dir.path }}/publickey"
@@ -39,16 +36,9 @@
     src: "{{ wg_conf_dir.path }}/wg_psk"
   register: wg_psk
 
-# - name: Debug wg_psk
-#   debug:
-#     msg: "{{ wg_psk.content | b64decode }}"
-
 - name: Get wireguard server public IPv4
   uri:
     url: "http://169.254.169.254/latest/meta-data/public-ipv4"
     remote_src: true
     return_content: true
   register: wg_public_ipv4
-
-# - debug:
-#     msg: "{{ wg_public_ipv4['content'] }}"

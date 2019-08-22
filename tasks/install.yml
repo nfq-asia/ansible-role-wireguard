@@ -16,6 +16,16 @@
     name: "wireguard"
     state: latest
 
+- name: Install pip3
+  apt:
+    name: python3-pip
+    update_cache: yes
+    state: present
+
+- name: Install boto3 of pip3
+  pip:
+    name: boto3
+
 # For Ubuntu minimal 19.04 and later
 - name: Check iptables is present
   stat:

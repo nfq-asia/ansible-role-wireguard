@@ -37,12 +37,6 @@
   register: wg_user_privatekey
   when: (item.value.remove == false)
 
-# Generate Wireguard server config
-# - debug:
-#     msg: "{{ item['content'] }}"
-#   loop: "{{ wg_user_publickey.results }}"
-#   when: (item.item.value.remove == false)
-
 - name: Generate Wireguard server config
   template:
     src: "wg0-server.j2"
@@ -72,11 +66,6 @@
   when: (item.item.value.remove == false)
   register: wg_user_profile
   notify: restart wg0
-
-# - debug:
-#     msg: "{{ item['dest'] }}"
-#   loop: "{{ wg_user_profile.results }}"
-#   when: (item.item.item.value.remove == false)
 
 - name: Fetch Wireguard user configs
   fetch:
