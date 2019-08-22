@@ -7,7 +7,7 @@
     name: boto3
 - name: upload key vpn
   s3_sync:
-    bucket: nfq-infrastructure-terraform
+    bucket: "{{ bucket }}"
     key_prefix: credentials/wireguard
     file_root: /etc/wireguard/
     aws_access_key: "{{ aws_access_key }}"
@@ -17,7 +17,7 @@
     exclude: "privatekey"
 - name: Delete an object from a bucket
   aws_s3:
-    bucket: nfq-infrastructure-terraform
+    bucket: "{{ bucket }}"
     object: credentials/wireguard/wg0.conf
     mode: delobj
     aws_access_key: "{{ aws_access_key }}"
