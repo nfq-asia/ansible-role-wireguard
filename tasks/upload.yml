@@ -1,0 +1,25 @@
+- name: Install pip
+  apt:
+    name: python3-pip
+    update_cache: yes
+    state: present
+- pip:
+    name: boto3
+- name: upload key vpn
+  s3_sync:
+    bucket: nfq-infrastructure-terraform
+    key_prefix: credentials/wireguard
+    file_root: /etc/wireguard/
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ region }}"
+    delete: yes
+    exclude: "privatekey"
+- name: Delete an object from a bucket
+  aws_s3:
+    bucket: nfq-infrastructure-terraform
+    object: credentials/wireguard/wg0.conf
+    mode: delobj
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ region }}"
