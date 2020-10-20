@@ -6,15 +6,15 @@
     autoclean: true
     autoremove: true
 
-- name: Add wireguard repository
-  apt_repository:
-    repo: "ppa:wireguard/wireguard"
-    state: present
+# - name: Add wireguard repository
+#   apt_repository:
+#     repo: "ppa:wireguard/wireguard"
+#     state: present
 
 - name: Install wireguard
   apt:
     name: "wireguard"
-    state: latest
+    state: present
 
 - name: Install pip3
   apt:
