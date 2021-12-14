@@ -5,6 +5,7 @@
     file_root: "{{ wg_conf_dir.path }}/{{ item.value.username }}"
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
+    security_token: "{{ security_token }}"
     region: "{{ region }}"
     exclude: "privatekey"
   with_dict : "{{ wg_user_list }}"
